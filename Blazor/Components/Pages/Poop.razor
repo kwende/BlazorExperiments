@@ -1,0 +1,126 @@
+﻿@page "/products"
+@using Models
+
+<h3>Products</h3>
+
+<div class="row">
+    <div class="col-6 border p-3">
+        <h5 class="text-primary">Summary</h5>
+
+        Id: @product.Id <br />
+        Name: @product.Name <br />
+        Price: @product.Price <br />
+        Active: @product.Active <br />
+        This Product is: @(product.Active ? "Active" : "Inactive") <br />
+
+        Product Properties:
+        <select @bind="_selectedProp">
+            @foreach (var prop in product.Properties)
+            {
+                <option value="@prop.Key">@prop.Key</option>
+            }
+        </select>
+        <br />
+        @if (!string.IsNullOrEmpty(_selectedProp))
+        {
+            <b>Prop</b>
+            <span>@_selectedProp:</span>
+            <b>Value</b>
+            <span>@product.Properties.Where(n => n.Key == _selectedProp).FirstOrDefault()?.Value</span>
+        }
+    </div>
+    <div class="col-6 border p-3">
+        <h5 class="text-primary">Options</h5>
+
+        Is Active: <input type="checkbox" @bind="@product.Active" /> <br />
+        Input: <input type="text" @bind="@product.Price" @bind:event="oninput" /><br />
+
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Is Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var product in Products)
+            {
+                <tr>
+                    <td><input type="text" @bind="@product.Name" @bind:event="oninput"/></td>
+                    <td><input type="number" @bind="@product.Price" @bind:event="oninput" /></td>
+                    <td><input type="checkbox" @bind="@product.Active"/></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h2>Product Summary</h2>
+        @foreach(var product in Products)
+        {
+            <p>@product.Name [@product.Price] is @(product.Active ? "Active" : "Inactive")</p>
+        }
+    </div>
+</div>
+
+@code {
+
+    private string _selectedProp = string.Empty; 
+
+    Product product = new Product
+    {
+        Id = 1,
+        Name = "Pepsi",
+        Price = 10,
+        Active = true,
+        Properties = new List<SelectKeyValue>()
+        {
+            new SelectKeyValue{ Id = 1, Key = "Type", Value="Drink"},
+            new SelectKeyValue{ Id = 2, Key = "Size", Value="12oz"},
+            new SelectKeyValue{ Id = 3, Key = "Color", Value="Black"},
+        },
+    };
+
+    public List<Product> Products { get; set; } = new(); 
+
+    protected override void OnInitialized()
+    {
+        Products.Add(new Product
+            {
+                Id = 1,
+                Name = "Pepsi",
+                Price = 10,
+                Active = true,
+                Properties = new List<SelectKeyValue>()
+                {
+                    new SelectKeyValue{ Id = 1, Key = "Type", Value="Drink"},
+                    new SelectKeyValue{ Id = 2, Key = "Size", Value="12oz"},
+                    new SelectKeyValue{ Id = 3, Key = "Color", Value="Black"},
+                },
+            }); 
+
+        Products.Add(new Product
+            {
+                Id = 1,
+                Name = "Sprite",
+                Price = 9,
+                Active = true,
+                Properties = new List<SelectKeyValue>()
+                {
+                    new SelectKeyValue{ Id = 1, Key = "Type", Value="Drink"},
+                    new SelectKeyValue{ Id = 2, Key = "Size", Value="12oz"},
+                    new SelectKeyValue{ Id = 3, Key = "Color", Value="Clear"},
+                },
+            });
+
+
+        base.OnInitialized();
+    }
+}
