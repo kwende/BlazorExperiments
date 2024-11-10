@@ -18,7 +18,7 @@
                 }
             }
             <br/>
-            <input type="button" class="btn btn-danger" style="width: 100px" value="Delete" />
+            <input type="button" class="btn btn-danger" style="width: 100px" value="Delete" @onclick="()=>onButtonClick(product.Id)" />
         </div>
     }
 </div>
@@ -26,6 +26,8 @@
 @code {
 
     public List<Product> Products { get; set; } = new();
+
+    private void onButtonClick(int productId) => Products.RemoveAll(n => n.Id == productId);
 
     protected override void OnInitialized()
     {
@@ -46,7 +48,7 @@
 
         Products.Add(new Product
             {
-                Id = 1,
+                Id = 2,
                 Name = "Sprite",
                 Price = 9,
                 Active = true,
