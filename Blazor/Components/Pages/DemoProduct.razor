@@ -4,33 +4,41 @@
 
 <h3>Demo Product</h3>
 
+<h4>Favorite product count: @FavoriteProducts.Count</h4>
+<h5>Favorite products: @FavoritesList</h5>
+
 <div class="row row-cols-2">
     @foreach(var product in Products)
     {
-        <div class="col border">
-            Product <span>@product.Id</span><br/>
-            Name - <span>@product.Name</span><br/>
-            Show Properties - <input type="checkbox" @bind="@product.Show" />
-            @if(product.Show)
-            {
-                @foreach(var property in product.Properties)
-                {
-                    <p>@property.Key - @property.Value</p>
-                }
-            }
-            <br/>
-            <_DeleteButtonComponent>
-            </_DeleteButtonComponent>
-@*             <input type="button" class="btn btn-danger" style="width: 100px" value="Delete" @onclick="()=>onButtonClick(product.Id)" />
- *@        </div>
+        <_IndividualComponent Product="@product" OnFavoriteChanged="OnFavoriteChanged">
+
+        </_IndividualComponent>
     }
 </div>
 
 @code {
 
+    public string FavoritesList { get; set; } = string.Empty; 
+
+    public List<Product> FavoriteProducts { get; set;  } = new List<Product>(); 
+
     public List<Product> Products { get; set; } = new();
 
     private void onButtonClick(int productId) => Products.RemoveAll(n => n.Id == productId);
+
+    public void OnFavoriteChanged(OnFavoriteChangedEventArgs e)
+    {
+        if(e.ToAdd)
+        {
+            FavoriteProducts.Add(e.Product); 
+        }
+        else
+        {
+            FavoriteProducts.Remove(e.Product); 
+        }
+
+        FavoritesList = string.Join(",", FavoriteProducts);
+    }
 
     protected override void OnInitialized()
     {

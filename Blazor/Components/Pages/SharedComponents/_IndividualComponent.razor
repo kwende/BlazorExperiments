@@ -1,0 +1,37 @@
+﻿@using Models
+
+<div class="col border">
+    <h4>Product <span>@Product.Id</span></h4><br />
+
+    <input type="checkbox" @onchange="OnFavoriteCheckboxChanged"/> Add to favorites<br/>
+    Name - <span>@Product.Name</span><br />
+    Show Properties - <input type="checkbox" @bind="@Product.Show" />
+    @if (Product.Show)
+    {
+        @foreach (var property in Product.Properties)
+        {
+            <p>@property.Key - @property.Value</p>
+        }
+    }
+    <br />
+    <_DeleteButtonComponent ProductId="@Product.Id">
+    </_DeleteButtonComponent>
+
+</div>
+
+@code {
+    [Parameter]
+    public Product Product { get; set; }
+
+    [Parameter]
+    public EventCallback<OnFavoriteChangedEventArgs> OnFavoriteChanged { get; set; }
+
+    private async Task OnFavoriteCheckboxChanged(ChangeEventArgs e)
+    {
+        await OnFavoriteChanged.InvokeAsync(new OnFavoriteChangedEventArgs
+        {
+            Product = Product,
+            ToAdd = (bool)(e.Value ?? false),
+        }); 
+    }
+}
