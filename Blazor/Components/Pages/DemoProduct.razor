@@ -1,43 +1,31 @@
-﻿@page "/products"
+﻿@page "/demoproduct"
 @using Models
 
-<h3>Products</h3>
+<h3>Demo Product</h3>
 
-<div class="row">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Product Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Is Active</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var product in Products)
+<div class="row row-cols-2">
+    @foreach(var product in Products)
+    {
+        <div class="col border">
+            Product <span>@product.Id</span><br/>
+            Name - <span>@product.Name</span><br/>
+            Show Properties - <input type="checkbox" @bind="@product.Show" />
+            @if(product.Show)
             {
-                <tr>
-                    <td><input type="text" @bind="@product.Name" @bind:event="oninput"/></td>
-                    <td><input type="number" @bind="@product.Price" @bind:event="oninput" /></td>
-                    <td><input type="checkbox" @bind="@product.Active"/></td>
-                </tr>
+                @foreach(var property in product.Properties)
+                {
+                    <p>@property.Key - @property.Value</p>
+                }
             }
-        </tbody>
-    </table>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <h2>Product Summary</h2>
-        @foreach(var product in Products)
-        {
-            <p>@product.Name [@product.Price] is @(product.Active ? "Active" : "Inactive")</p>
-        }
-    </div>
+            <br/>
+            <input type="button" class="btn btn-danger" style="width: 100px" value="Delete" />
+        </div>
+    }
 </div>
 
 @code {
 
-    public List<Product> Products { get; set; } = new(); 
+    public List<Product> Products { get; set; } = new();
 
     protected override void OnInitialized()
     {
@@ -47,20 +35,22 @@
                 Name = "Pepsi",
                 Price = 10,
                 Active = true,
+                Show = true,
                 Properties = new List<SelectKeyValue>()
                 {
                     new SelectKeyValue{ Id = 1, Key = "Type", Value="Drink"},
                     new SelectKeyValue{ Id = 2, Key = "Size", Value="12oz"},
                     new SelectKeyValue{ Id = 3, Key = "Color", Value="Black"},
                 },
-            }); 
+            });
 
         Products.Add(new Product
             {
-                Id = 2,
+                Id = 1,
                 Name = "Sprite",
                 Price = 9,
                 Active = true,
+                Show = true,
                 Properties = new List<SelectKeyValue>()
                 {
                     new SelectKeyValue{ Id = 1, Key = "Type", Value="Drink"},
@@ -72,4 +62,5 @@
 
         base.OnInitialized();
     }
+
 }
