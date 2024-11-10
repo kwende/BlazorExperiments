@@ -1,5 +1,6 @@
 ﻿@page "/demoproduct"
 @using Models
+@using Blazor.Components.Pages.SharedComponents
 
 <h3>Demo Product</h3>
 
@@ -18,8 +19,10 @@
                 }
             }
             <br/>
-            <input type="button" class="btn btn-danger" style="width: 100px" value="Delete" @onclick="()=>onButtonClick(product.Id)" />
-        </div>
+            <_DeleteButtonComponent>
+            </_DeleteButtonComponent>
+@*             <input type="button" class="btn btn-danger" style="width: 100px" value="Delete" @onclick="()=>onButtonClick(product.Id)" />
+ *@        </div>
     }
 </div>
 
